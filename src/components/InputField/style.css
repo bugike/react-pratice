@@ -1,0 +1,35 @@
+.input-field-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.input-field-container input {
+  box-sizing: border-box;
+  width: 312px;
+  padding-left: 5px;
+  font-size: 1rem;
+  border: none;
+  height: 25px;
+}
+
+.input-field-container button {
+  width: 25px;
+  height: 25px;
+  border: none;
+  background-color: orangered;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  margin-right: 2px;
+  cursor: pointer;
+}
+
+.input-field-container button:hover {
+  background-color: tomato;
+}
+
+.input-field-container select {
+  border: none;
+}

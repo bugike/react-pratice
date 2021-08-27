@@ -1,0 +1,35 @@
+.item-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  height: 25px;
+  margin: 0.5px 0;
+}
+
+.item-container p {
+  box-sizing: border-box;
+  width: 371px;
+  padding-left: 5px;
+  font-size: 1rem;
+  border: none;
+  height: 25px;
+  background-color: white;
+  margin-top: 0;
+  font-weight: 600;
+}
+
+.item-container button {
+  width: 25px;
+  height: 25px;
+  border: none;
+  background-color: orangered;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  cursor: pointer;
+}
+
+.item-container button:hover {
+  background-color: tomato;
+}

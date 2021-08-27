@@ -71,9 +71,24 @@ export class Counter extends Component {
         return (
             <div className='counter-container'>
                 <Count count={ count }/>
-                <ButtonRow text1='Increment' text2='Decrement' func1={this.increment} func2={this.decrement} />
-                <ButtonRow text1='Increment-If-Odd' text2='Async-Inc' func1={this.incIfOdd} func2={this.asyncInc} />
-                <button id='timer-inc-btn' onClick={this.timer} style={{ backgroundColor: `${ btnColor }`}}>{ btnText }</button>
+                <ButtonRow 
+                    text1='Increment' 
+                    text2='Decrement' 
+                    func1={ this.increment } 
+                    func2={ this.decrement } 
+                />
+                <ButtonRow 
+                    text1='Increment-If-Odd' 
+                    text2='Async-Inc' 
+                    func1={ this.incIfOdd } 
+                    func2={ this.asyncInc } 
+                />
+                <button 
+                    onClick={ this.timer } 
+                    style={{ backgroundColor: `${ btnColor }`}}
+                >
+                { btnText }
+                </button>
             </div>
         )
     }
