@@ -1,0 +1,25 @@
+.wrap-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 500px;
+  padding: 20px;
+  margin: 20px auto;
+  border: 1px solid black;
+  border-radius: 10px;
+}
+
+.wrap-container > button {
+  width: 80px;
+  height: 40px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.wrap-container > button:hover {
+  background-color: aquamarine;
+}
+
+.wrap-container button {
+  transition: 0.3s;
+}

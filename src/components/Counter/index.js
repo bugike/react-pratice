@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './style.css';
 import Count from '../Count';
 import ButtonRow from '../ButtonRow';
+import UpdatedComponent from '../../hoc/UpdatedComponent';
 
 export class Counter extends Component {
     constructor(props) {
@@ -86,6 +87,7 @@ export class Counter extends Component {
                 <button 
                     onClick={ this.timer } 
                     style={{ backgroundColor: `${ btnColor }`}}
+                    id='timer-btn'
                 >
                 { btnText }
                 </button>
@@ -94,4 +96,4 @@ export class Counter extends Component {
     }
 }
 
-export default Counter;
+export default UpdatedComponent(Counter);

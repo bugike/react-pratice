@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import InputField from '../InputField';
 import ItemList from '../ItemList';
 import './style.css';
+import UpdatedComponent from '../../hoc/UpdatedComponent';
 
 export class TdList extends Component {
     constructor(props) {
@@ -53,7 +54,6 @@ export class TdList extends Component {
                 if(a.text > b.text) { return 1; }
                 return 0;
             });
-            console.log(sortedArr);
         }
         if (type === 'ZA') {
             sortedArr.sort(function(a, b){
@@ -61,11 +61,9 @@ export class TdList extends Component {
                 if(a.text < b.text) { return 1; }
                 return 0;
             });
-            console.log(sortedArr);
         }
 
         setTimeout(() => this.setState({ itemList: sortedArr }));
-        setTimeout(() => console.log(this.state), 100);
     }
 
     deleteItem(id) {
@@ -91,4 +89,4 @@ export class TdList extends Component {
     }
 }
 
-export default TdList
+export default UpdatedComponent(TdList);
