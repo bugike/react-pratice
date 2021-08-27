@@ -32,44 +32,47 @@ export class TdList extends Component {
 
     addFunc = (e) => {
         e.preventDefault();
+        if (!this.state.inputText) return;
         this.setState(preState => ({
             itemList: [...preState.itemList, { text: this.state.inputText, id: this.state.itemId }]
         }));
         this.setState(prevState => {
             return { itemId: prevState.itemId + 1 };
         });
-        setTimeout(() => document.getElementById('input').value = '', 100);
+        setTimeout(() => document.getElementById('input').value = '', 50);
+        setTimeout(() => this.setState({ inputText: '' }), 50);
     }
 
     sortFunc = (e) => {
         const type = e.target.value;
-        let sortedArr = this.state.itemList;
-        console.log(sortedArr);
+
+        const sortedArr = this.state.itemList;
         if (type === 'AZ') {
             sortedArr.sort(function(a, b){
-                if(a.inputText < b.inputText) { return -1; }
-                if(a.inputText > b.inputText) { return 1; }
+                if(a.text < b.text) { return -1; }
+                if(a.text > b.text) { return 1; }
                 return 0;
             });
             console.log(sortedArr);
         }
         if (type === 'ZA') {
             sortedArr.sort(function(a, b){
-                if(a.inputText > b.inputText) { return -1; }
-                if(a.inputText < b.inputText) { return 1; }
+                if(a.text > b.text) { return -1; }
+                if(a.text < b.text) { return 1; }
                 return 0;
             });
+            console.log(sortedArr);
         }
 
         setTimeout(() => this.setState({ itemList: sortedArr }));
         setTimeout(() => console.log(this.state), 100);
     }
 
-    deleteItem = (id) => {
+    deleteItem(id) {
+        const list = [...this.state.itemList];
+        const updatedList = list.filter(item => item.id !== id);
         this.setState({
-            itemList: this.state.itemList.filter(item => {
-                return item.id !== id;
-            })
+            itemList: updatedList
         });
     }
 

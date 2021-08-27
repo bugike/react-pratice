@@ -7,7 +7,7 @@ function ItemList(props) {
     return (
         <div className='item-list-container'>
             {itemList.map(item => (
-                <Item text={item.text} deleteItem={deleteItem} key={item.id}/>
+                <Item text={item.text} deleteItem={deleteItem} itemId={item.id} key={item.id} />
             ))}
         </div>
     )
