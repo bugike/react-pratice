@@ -3,11 +3,11 @@ import './style.css';
 import { RiDeleteBinLine } from 'react-icons/ri';
 
 function Item(props) {
-    const { text, deleteItem, itemId } = props;
+    const { text, deleteFunc, itemId } = props;
     return (
         <li className='item-container'>
             <p>{ text }</p>
-            <button onClick={() => deleteItem(itemId)}><RiDeleteBinLine /></button>
+            <button onClick={() => deleteFunc(itemId)}><RiDeleteBinLine /></button>
         </li>
     )
 }

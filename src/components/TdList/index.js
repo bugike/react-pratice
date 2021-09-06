@@ -3,21 +3,12 @@ import InputField from '../InputField';
 import ItemList from '../ItemList';
 import './style.css';
 import UpdatedComponent from '../../hoc/UpdatedComponent';
+import * as actions from '../../redux/actions';
+import { connect } from 'react-redux';
 
 export class TdList extends Component {
-    constructor(props) {
-        super(props);
 
-        this.state = {
-            inputText: '',
-            itemList: [],
-            itemId: 0,
-        };
-
-        this.deleteItem = this.deleteItem.bind(this);
-    }
-
-    debounce(func, timeout = 300) {
+    debounce(func, timeout = 200) {
         let timer;
         return (...args) => {
             clearTimeout(timer);
@@ -27,66 +18,67 @@ export class TdList extends Component {
         };
     }
 
-    inputFunc = (e) => {
-        this.setState({ inputText: e.target.value });
-    };
-
-    addFunc = (e) => {
-        e.preventDefault();
-        if (!this.state.inputText) return;
-        this.setState(preState => ({
-            itemList: [...preState.itemList, { text: this.state.inputText, id: this.state.itemId }]
-        }));
-        this.setState(prevState => {
-            return { itemId: prevState.itemId + 1 };
-        });
-        setTimeout(() => document.getElementById('input').value = '', 50);
-        setTimeout(() => this.setState({ inputText: '' }), 50);
-    }
-
-    sortFunc = (e) => {
-        const type = e.target.value;
-
-        const sortedArr = this.state.itemList;
-        if (type === 'AZ') {
-            sortedArr.sort(function(a, b){
-                if(a.text < b.text) { return -1; }
-                if(a.text > b.text) { return 1; }
-                return 0;
-            });
-        }
-        if (type === 'ZA') {
-            sortedArr.sort(function(a, b){
-                if(a.text > b.text) { return -1; }
-                if(a.text < b.text) { return 1; }
-                return 0;
-            });
-        }
-
-        setTimeout(() => this.setState({ itemList: sortedArr }));
-    }
-
-    deleteItem(id) {
-        const list = [...this.state.itemList];
-        const updatedList = list.filter(item => item.id !== id);
-        this.setState({
-            itemList: updatedList
-        });
-    }
-
     render() {
+        const {
+            inputText,
+            itemList,
+            itemId,
+            changeInputText,
+            addItem,
+            changeItemId,
+            deleteItem,
+            sortArray
+        } = this.props;
+
+        const inputFunc = (e) => {
+            changeInputText(e.target.value);
+        };
+
+        const addFunc = () => {
+            if (!inputText) return;
+            let newItem = { text: inputText, id: itemId };
+            addItem(newItem);
+            changeItemId();
+            setTimeout(() => document.getElementById('input').value = '', 50);
+            setTimeout(() => changeInputText(''), 50);
+        };
+
+        const sortFunc = (e) => {
+            sortArray(e.target.value);
+        }
+
+        const deleteFunc = id => {
+            deleteItem(id);
+        }
+
         return (
             <div className='td-list-container'>
                 <h2>Todo List</h2>
                 <InputField 
-                    inputFunc={ this.debounce(this.inputFunc) } 
-                    addFunc={ this.addFunc } 
-                    sortFunc={ this.sortFunc }
+                    inputFunc={ this.debounce(inputFunc) } 
+                    addFunc={ addFunc } 
+                    sortFunc={ sortFunc }
                 />
-                <ItemList itemList={ this.state.itemList } deleteItem={ this.deleteItem }/>
+                <ItemList itemList={ itemList } deleteFunc={ deleteFunc }/>
             </div>
         )
     }
 }
 
-export default UpdatedComponent(TdList);
+const mapStateToProps = state => ({
+    inputText: state.inputText,
+    itemList: state.itemList,
+    itemId: state.itemId
+});
+
+const mapDispatchToProps = dispatch => ({
+    changeInputText: text => dispatch(actions.changeInputText(text)),
+    addItem: item => dispatch(actions.addItem(item)),
+    changeItemId: () => dispatch(actions.changeItemId()),
+    deleteItem: id => dispatch(actions.deleteItem(id)),
+    sortArray: direction => dispatch(actions.sortArray(direction))
+});
+
+
+const connectedTdList = connect(mapStateToProps, mapDispatchToProps)(TdList);
+export default UpdatedComponent(connectedTdList);

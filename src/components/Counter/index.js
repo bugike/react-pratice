@@ -3,89 +3,53 @@ import './style.css';
 import Count from '../Count';
 import ButtonRow from '../ButtonRow';
 import UpdatedComponent from '../../hoc/UpdatedComponent';
+import { connect } from 'react-redux';
+import * as actions from '../../redux/actions';
 
-export class Counter extends Component {
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            count: 0,
-            btnText: 'Start',
-            btnColor: 'lightgreen', 
-        }
-
-    }
-
-    increment = () => {
-        this.setState(prevState => {
-            return { count: prevState.count + 1 };
-        });
-    };
-
-    decrement = () => {
-        this.setState(prevState => {
-            return { count: prevState.count - 1 };
-        });
-    };
-
-    incIfOdd = () => {
-        if (this.state.count % 2 !== 0) {
-            this.setState(prevState => {
-                return { count: prevState.count + 1 };
-        });
-        }
-        else { return; }
-    }
-
-    asyncInc = () => {
-        setTimeout(() => {
-            this.setState(prevState => {
-                return { count: prevState.count + 1 };
-        })}, 1000);
-    }
-
-    timer = () => {
-        this.setState(prevState => {
-            const text = prevState.btnText === 'Start' ? 'Stop' : 'Start';
-            return { btnText: text };
-        });
-
-        this.setState(prevState => {
-            const color = prevState.btnColor === 'lightgreen' ? 'red' : 'lightgreen';
-            return { btnColor: color };
-        });
-
-        if (this.state.btnText === 'Start') {
-            this.id = setInterval(() => {
-            this.setState(prevState => {
-                return { count: prevState.count + 1 };
-        })}, 1000);
-        }
-        if (this.state.btnText === 'Stop') {
-            clearInterval(this.id);
-        }
-    }
-
+class Counter extends Component {
 
     render() {
-        const { count, btnText, btnColor} = this.state;
+        const { 
+            count, 
+            btnText, 
+            btnColor, 
+            intervalID,
+            increment,
+            decrement,
+            incIfOdd,
+            asyncInc,
+            changeBtnStyle,
+            saveIntervalId,
+        } = this.props;
+
+        const timer = () => {
+            if(btnText === 'Start') {
+                let id = setInterval(increment, 1000);
+                saveIntervalId(id);
+            }
+            else {
+                clearInterval(intervalID);
+            }
+            changeBtnStyle();
+        }
+
         return (
             <div className='counter-container'>
                 <Count count={ count }/>
                 <ButtonRow 
                     text1='Increment' 
                     text2='Decrement' 
-                    func1={ this.increment } 
-                    func2={ this.decrement } 
+                    func1={ increment } 
+                    func2={ decrement } 
                 />
                 <ButtonRow 
                     text1='Increment-If-Odd' 
                     text2='Async-Inc' 
-                    func1={ this.incIfOdd } 
-                    func2={ this.asyncInc } 
+                    func1={ incIfOdd } 
+                    func2={ asyncInc } 
                 />
                 <button 
-                    onClick={ this.timer } 
+                    onClick={ timer } 
                     style={{ backgroundColor: `${ btnColor }`}}
                     id='timer-btn'
                 >
@@ -96,4 +60,23 @@ export class Counter extends Component {
     }
 }
 
-export default UpdatedComponent(Counter);
+const mapStateToProps = state => ({
+    count: state.count,
+    btnText: state.btnText,
+    btnColor: state.btnColor,
+    intervalID: state.intervalID
+});
+
+const mapDispatchToProps = dispatch => ({
+    increment: () => dispatch(actions.increment()),
+    decrement: () => dispatch(actions.decrement()),
+    incIfOdd: () => dispatch(actions.incIfOdd()),
+    asyncInc: () => setTimeout(() => {
+        dispatch(actions.increment());
+    }, 1000),
+    changeBtnStyle: () => dispatch(actions.changeBtnStyle()),
+    saveIntervalId: id => dispatch(actions.saveIntervalId(id))
+});
+
+const connectedCounter = connect(mapStateToProps, mapDispatchToProps)(Counter);
+export default UpdatedComponent(connectedCounter);
